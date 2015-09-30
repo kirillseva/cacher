@@ -1,4 +1,4 @@
-LRUcache <- R6Class("LRUcache",
+LRUcache <- R6::R6Class("LRUcache",
   public = list(
     initialize = function(size) {
       stopifnot(is.numeric(size))
