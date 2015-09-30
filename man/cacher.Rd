@@ -4,8 +4,8 @@
 \name{cacher}
 \alias{cacher}
 \alias{cacher-package}
-\title{Describe the package.}
+\title{In-memory cache interface.}
 \description{
-Describe the package.
+In-memory cache interface.
 }
 

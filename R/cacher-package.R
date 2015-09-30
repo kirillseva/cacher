@@ -1,6 +1,6 @@
-#' Describe the package.
+#' In-memory cache interface.
 #'
 #' @name cacher
-#' @import stringr
+#' @import R6
 #' @docType package
 NULL
