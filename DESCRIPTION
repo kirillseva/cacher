@@ -1,7 +1,7 @@
 Package: cacher
 Type: Package
 Title: cacher (http://github.com/kirillseva/cacher)
-Description: Describe the package.
+Description: In-memory cache interfaces for R.
 Version: 0.0.1.9000
 Author: Kirill Sevastyanenko <kirillseva@gmail.com>
 Maintainer: Kirill Sevastyanenko <kirillseva@gmail.com>
@@ -11,8 +11,12 @@ Depends:
     R (>= 3.0.1)
 License: MIT
 LazyData: true
+Imports:
+    R6
 Suggests:
     knitr,
     microbenchmark,
     testthat
 Roxygen: list(wrap = FALSE)
+URL: http://github.com/kirillseva/cacher
+BugReports: http://github.com/kirillseva/cacher/issues
