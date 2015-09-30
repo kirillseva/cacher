@@ -1,0 +1,18 @@
+Package: cacher
+Type: Package
+Title: cacher (http://github.com/kirillseva/cacher)
+Description: Describe the package.
+Version: 0.0.1.9000
+Author: Kirill Sevastyanenko <kirillseva@gmail.com>
+Maintainer: Kirill Sevastyanenko <kirillseva@gmail.com>
+Authors@R: c(person("Kirill", "Sevastyanenko",
+    email = "kirillseva@gmail.com", role = c("aut", "cre")))
+Depends:
+    R (>= 3.0.1)
+License: MIT
+LazyData: true
+Suggests:
+    knitr,
+    microbenchmark,
+    testthat
+Roxygen: list(wrap = FALSE)
