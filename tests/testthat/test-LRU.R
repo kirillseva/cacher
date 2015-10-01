@@ -25,4 +25,12 @@ describe('Using LRU cache', {
     expect_false(cache$exists('cache'))
     expect_true(cache$exists('hello'))
   })
+
+  test_that('Test peek', {
+    cache <- LRUcache(2)
+    cache$set('hello', 'world')$set('cache', 'money')
+    expect_is(cache$last_accessed('cache'), 'POSIXct')
+    # did not update the timestamp metadata
+    expect_true(cache$last_accessed('hello') < cache$last_accessed('cache'))
+  })
 })
