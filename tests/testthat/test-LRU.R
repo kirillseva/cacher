@@ -33,4 +33,17 @@ describe('Using LRU cache', {
     # did not update the timestamp metadata
     expect_true(cache$last_accessed('hello') < cache$last_accessed('cache'))
   })
+
+  test_that('Test with byte size', {
+    cache <- LRUcache('150B')
+    cache$set('foo', 54.124)
+    cache$set('bar', 54.124)
+    cache$set('baz', 54.124)
+
+    # foo should've been bumped due to size
+    expect_false(cache$exists('foo'))
+
+    # error should raise with too large object
+    expect_error(cache$set('big',c(1:1e6)))
+  })
 })
