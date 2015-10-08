@@ -40,7 +40,7 @@ LRUcache_class <- R6::R6Class("LRUcache",
       # Check if this value alone exceeds the cache size
       size <- if(private$use_bytes) as.integer(as.character(pryr::object_size(value))) else 1
       if (size > private$max_num){
-        warning(sprintf("'%s' is too large (%dB) to fit in the cache (%dB) and will not be cached.  Consider creating a larger cache.", name, size, private$max_num), call. = FALSE)
+        warning(sprintf("'%s' is too large (%dB) to fit in the cache (%dB) and will not be cached. Consider creating a larger cache.", name, size, private$max_num), call. = FALSE)
         return(NULL)
       }
       # Check for eviction
