@@ -12,7 +12,8 @@ Depends:
 License: MIT
 LazyData: true
 Imports:
-    R6
+    R6,
+    pryr
 Suggests:
     knitr,
     microbenchmark,
