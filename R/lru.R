@@ -18,13 +18,6 @@ LRUcache_class <- R6::R6Class("LRUcache",
     },
     set = function(name, value) {
       stopifnot(is.character(name) && length(name) == 1)
-      # Check if this value alone exceeds the cache size
-      size <- if(private$use_bytes) as.integer(as.character(pryr::object_size(value))) else 1
-      if (size > private$max_num){
-        stop(sprintf("%s is too big (%d) to fit in the cache (%d).  Consider creating a larger cache.",name, size, private$max_num))
-      }
-      # Check for eviction
-      while (private$get_current_size() + size > private$max_num && !(name %in% ls(private$data))) private$evict()
       private$save(name, value)
       invisible(self)
     },
@@ -44,6 +37,14 @@ LRUcache_class <- R6::R6Class("LRUcache",
     data    = new.env(),
     use_bytes = FALSE,
     save    = function(name, value) {
+      # Check if this value alone exceeds the cache size
+      size <- if(private$use_bytes) as.integer(as.character(pryr::object_size(value))) else 1
+      if (size > private$max_num){
+        warning(sprintf("'%s' is too large (%dB) to fit in the cache (%dB) and will not be cached.  Consider creating a larger cache.", name, size, private$max_num), call. = FALSE)
+        return(NULL)
+      }
+      # Check for eviction
+      while (private$get_current_size() + size > private$max_num && !(name %in% ls(private$data))) private$evict()
       private$data[[name]] <- list(value = value, timestamp = Sys.time())
     },
     fetch   = function(name) {

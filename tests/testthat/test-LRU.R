@@ -43,7 +43,8 @@ describe('Using LRU cache', {
     # foo should've been bumped due to size
     expect_false(cache$exists('foo'))
 
-    # error should raise with too large object
-    expect_error(cache$set('big',c(1:1e6)))
+    # warning should raise with too large object
+    expect_warning(cache$set('big', c(1:1e6)))
+    expect_false(cache$exists('big'))
   })
 })
