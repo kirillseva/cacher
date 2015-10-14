@@ -1,16 +1,18 @@
-LRUcache_class <- R6::R6Class("LRUcache",
+#' @export
+LRUcache <- function(params) {
+  if (is.numeric(params)) {
+    LRUcache_.numeric$new(params)
+  } else if (is.character(params)) {
+    LRUcache_.character$new(params)
+  } else {
+    stop ("invalid params")
+  }
+}
+
+LRUcache_ <- R6::R6Class("LRUcache_",
   public = list(
     initialize = function(size) {
-      # Parse size
-      if(is.character(size)){
-        # Check that string actually describes a size
-        stopifnot(length(regmatches(size,regexpr('[0-9.]+[kmg]?b?',size, ignore.case=TRUE))) > 0)
-        private$max_num = private$convert_size_to_bytes(size)
-        private$use_bytes = TRUE
-      } else {
-        stopifnot(all.equal(size, as.integer(size)) && length(size) == 1 && size > 0)
-        private$max_num = size
-      }
+      raise("Implement in children")
     },
     exists = function(name) {
       stopifnot(is.character(name) && length(name) == 1)
@@ -35,16 +37,15 @@ LRUcache_class <- R6::R6Class("LRUcache",
   private = list(
     max_num = 0,
     data    = new.env(),
-    use_bytes = FALSE,
     save    = function(name, value) {
       # Check if this value alone exceeds the cache size
-      size <- if(private$use_bytes) as.integer(as.character(pryr::object_size(value))) else 1
+      size <- private$get_new_item_size(value)
       if (size > private$max_num){
-        warning(sprintf("In package cacher: '%s' is too large (%dB) to fit in the LRU cache (%dB) and will not be cached. Consider creating a larger cache.", name, size, private$max_num), call. = FALSE)
+        warning(sprintf("'%s' is too large (%d) to fit in the cache (%d) and will not be cached. Consider creating a larger cache.", name, size, private$max_num), call. = FALSE)
         return(NULL)
       }
       # Check for eviction
-      while (private$get_current_size() + size > private$max_num && !(name %in% ls(private$data))) private$evict()
+      while (private$check_for_eviction(name, size)) private$evict()
       private$data[[name]] <- list(value = value, timestamp = Sys.time())
     },
     fetch   = function(name) {
@@ -60,6 +61,46 @@ LRUcache_class <- R6::R6Class("LRUcache",
       times  <- sapply(private$data, function(elem) elem$timestamp)
       oldest <- names(which.min(times))
       rm(list = oldest, envir = private$data)
+    }
+  )
+)
+
+#' @export
+LRUcache_.numeric <- R6::R6Class("LRUcache_.numeric", inherit = LRUcache_,
+  public = list(
+    initialize = function(size) {
+      stopifnot(all.equal(size, as.integer(size)) && length(size) == 1 && size > 0)
+      private$max_num = size
+    }
+  ),
+  private = list(
+    get_new_item_size = function(item){
+      1
+    },
+    check_for_eviction = function(name, size){
+      private$get_current_size() + size > private$max_num && !(name %in% ls(private$data))
+    },
+    get_current_size = function(){
+      length(private$data)
+    }
+  )
+)
+
+#' @export
+LRUcache_.character <- R6::R6Class("LRUcache_.character", inherit = LRUcache_,
+  public = list(
+    initialize = function(size) {
+      # Parse size.  Check that string actually describes a size.
+      stopifnot(length(regmatches(size,regexpr('[0-9.]+[kmg]?b?',size, ignore.case=TRUE))) > 0)
+      private$max_num = private$convert_size_to_bytes(size)
+    }
+  ),
+  private = list(
+    get_new_item_size = function(item){
+      as.integer(as.character(pryr::object_size(item)))
+    },
+    check_for_eviction = function(name, size){
+      private$get_current_size() + size > private$max_num && !(name %in% ls(private$data))
     },
     convert_size_to_bytes = function(size){ # size is a string, e.g. "100mb"
       qty <- as.double(regmatches(size, regexpr("[0-9.]+", size))) # e.g. 100, 12.5
@@ -73,16 +114,8 @@ LRUcache_class <- R6::R6Class("LRUcache",
       qty * (1000^pow) # pryr::object_size assumes 1KB = 1000B rather than 1024B
     },
     get_current_size = function(){ # in bytes
-      if(length(private$data) == 0){
-        0
-      } else if(private$use_bytes){
+      if(length(private$data) == 0) 0 else
         Reduce(sum, lapply(private$data, function(x) {as.integer(as.character(pryr::object_size(x)))}))
-      } else {
-        length(private$data)
-      }
     }
   )
 )
-
-#' @export
-LRUcache <- function(size) LRUcache_class$new(size)
