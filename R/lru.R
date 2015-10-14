@@ -1,14 +1,3 @@
-#' @export
-LRUcache <- function(params) {
-  if (is.numeric(params)) {
-    LRUcache_.numeric$new(params)
-  } else if (is.character(params)) {
-    LRUcache_.character$new(params)
-  } else {
-    stop ("invalid params")
-  }
-}
-
 LRUcache_ <- R6::R6Class("LRUcache_",
   public = list(
     initialize = function(size) {
@@ -65,7 +54,6 @@ LRUcache_ <- R6::R6Class("LRUcache_",
   )
 )
 
-#' @export
 LRUcache_.numeric <- R6::R6Class("LRUcache_.numeric", inherit = LRUcache_,
   public = list(
     initialize = function(size) {
@@ -86,7 +74,6 @@ LRUcache_.numeric <- R6::R6Class("LRUcache_.numeric", inherit = LRUcache_,
   )
 )
 
-#' @export
 LRUcache_.character <- R6::R6Class("LRUcache_.character", inherit = LRUcache_,
   public = list(
     initialize = function(size) {
@@ -119,3 +106,10 @@ LRUcache_.character <- R6::R6Class("LRUcache_.character", inherit = LRUcache_,
     }
   )
 )
+#' @export
+LRUcache <- function(params) {
+  UseMethod('LRUcache', params)
+}
+
+LRUcache.numeric <- function(params) LRUcache_.numeric$new(params)
+LRUcache.character <- function(params) LRUcache_.character$new(params)
