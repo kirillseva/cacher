@@ -21,9 +21,9 @@ LRUcache_ <- R6::R6Class("LRUcache_",
       stopifnot(name %in% ls(private$data))
       private$peek(name)
     },
-    print = function(name) {
+    print = function() {
       cat(paste0("<LRUcache> of capacity ", private$max_num),
-          private$format_cache()
+          toString(private$format_cache())
           , sep="\n")
       invisible(self)
     }
@@ -57,10 +57,7 @@ LRUcache_ <- R6::R6Class("LRUcache_",
       rm(list = oldest, envir = private$data)
     },
     format_cache = function(){
-      le <- as.list(private$data)
-      print.str <- paste("Name","Value","Timestamp\n",sep="\t")
-      for(i in 1:length(le)) { print.str <- cat(print.str, paste(names(le)[[i]],le[[i]]$value,le[[i]]$timestamp, sep="\t"),"\n")}
-      print.str
+      format(ldply(as.list(private$data), .fun = function(x) {data.frame("timestamp" = x$timestamp, "value" = x$value)}))
     }
   )
 )
