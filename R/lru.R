@@ -1,7 +1,6 @@
 LRUcache_ <- R6::R6Class("LRUcache_",
   public = list(
     initialize = function(size) {
-      raise("Implement in children")
     },
     exists = function(name) {
       stopifnot(is.character(name) && length(name) == 1)
@@ -62,9 +61,7 @@ LRUcache_.numeric <- R6::R6Class("LRUcache_.numeric", inherit = LRUcache_,
     }
   ),
   private = list(
-    get_new_item_size = function(item){
-      1
-    },
+    get_new_item_size = function(item) 1,
     check_for_eviction = function(name, size){
       private$get_current_size() + size > private$max_num && !(name %in% ls(private$data))
     },
