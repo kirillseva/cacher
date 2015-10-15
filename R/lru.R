@@ -57,7 +57,7 @@ LRUcache_ <- R6::R6Class("LRUcache_",
       rm(list = oldest, envir = private$data)
     },
     format_cache = function(){
-      format(ldply(as.list(private$data), .fun = function(x) {data.frame("timestamp" = x$timestamp, "value" = x$value)}))
+      format(plyr::ldply(as.list(private$data), .fun = function(x) {data.frame("timestamp" = x$timestamp, "value" = x$value)}))
     }
   )
 )
