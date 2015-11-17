@@ -22,7 +22,7 @@ LRUcache_ <- R6::R6Class("LRUcache_",
       private$peek(name)
     },
     print = function() {
-      cat(paste0("<LRUcache> of capacity ", private$max_num),
+      cat(sprintf("<LRUcache> of capacity %d%s", private$max_num, private$units),
           toString(private$format_cache())
           , sep="\n")
       invisible(self)
@@ -31,11 +31,14 @@ LRUcache_ <- R6::R6Class("LRUcache_",
   private = list(
     max_num = 0,
     data    = new.env(),
+    units   = '',
     save    = function(name, value) {
       # Check if this value alone exceeds the cache size
       size <- private$get_new_item_size(value)
       if (size > private$max_num){
-        warning(sprintf("'%s' is too large (%d) to fit in the cache (%d) and will not be cached. Consider creating a larger cache.", name, size, private$max_num), call. = FALSE)
+        warning(sprintf("'%s' is too large (%d%s) to fit in the cache (%d%s) and will
+          not be cached. Consider creating a larger cache.",
+          name, size, private$units, private$max_num, private$units), call. = FALSE)
         return(NULL)
       }
       # Check for eviction
@@ -89,6 +92,7 @@ LRUcache_.character <- R6::R6Class("LRUcache_.character", inherit = LRUcache_,
     }
   ),
   private = list(
+    units = 'B',
     get_new_item_size = function(item){
       as.integer(as.character(pryr::object_size(item)))
     },
