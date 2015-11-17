@@ -36,7 +36,7 @@ LRUcache_ <- R6::R6Class("LRUcache_",
       # Check if this value alone exceeds the cache size
       size <- private$get_new_item_size(value)
       if (size > private$max_num){
-        warning(sprintf("'%s' is too large (%d%s) to fit in the cache (%d%s) and will
+        warning(sprintf("In package cacher: '%s' is too large (%d%s) to fit in the cache (%d%s) and will
           not be cached. Consider creating a larger cache.",
           name, size, private$units, private$max_num, private$units), call. = FALSE)
         return(NULL)
