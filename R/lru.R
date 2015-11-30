@@ -8,7 +8,7 @@ LRUcache_class <- R6::R6Class("LRUcache",
         private$max_num = private$convert_size_to_bytes(size)
         private$use_bytes = TRUE
       } else {
-        stopifnot(all.equal(size, as.integer(size)) && length(size) == 1 && size > 0)
+        stopifnot(all.equal(size, as.numeric(size)) && length(size) == 1 && size > 0)
         private$max_num = size
       }
     },
@@ -76,7 +76,7 @@ LRUcache_class <- R6::R6Class("LRUcache",
       if(length(private$data) == 0){
         0
       } else if(private$use_bytes){
-        Reduce(sum, lapply(private$data, function(x) {as.integer(as.character(pryr::object_size(x)))}))
+        Reduce(sum, lapply(private$data, function(x) {as.numeric(as.character(pryr::object_size(x)))}))
       } else {
         length(private$data)
       }
