@@ -93,7 +93,7 @@ LRUcache_.character <- R6::R6Class("LRUcache_.character", inherit = LRUcache_,
   private = list(
     units = 'B',
     get_new_item_size = function(item){
-      as.integer(as.character(pryr::object_size(item)))
+      as.numeric(as.character(pryr::object_size(item)))
     },
     convert_size_to_bytes = function(size){ # size is a string, e.g. "100mb"
       qty <- as.double(regmatches(size, regexpr("[0-9.]+", size))) # e.g. 100, 12.5
@@ -108,7 +108,7 @@ LRUcache_.character <- R6::R6Class("LRUcache_.character", inherit = LRUcache_,
     },
     get_current_size = function(){ # in bytes
       if(length(private$data) == 0) 0 else
-        Reduce(sum, lapply(private$data, function(x) { as.integer(as.character(pryr::object_size(x))) }))
+        Reduce(sum, lapply(private$data, function(x) { as.numeric(as.character(pryr::object_size(x))) }))
     }
   )
 )

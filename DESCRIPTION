@@ -2,7 +2,7 @@ Package: cacher
 Type: Package
 Title: cacher (http://github.com/kirillseva/cacher)
 Description: In-memory cache interfaces for R.
-Version: 0.0.3
+Version: 0.0.4
 Author: Kirill Sevastyanenko <kirillseva@gmail.com>
 Maintainer: Kirill Sevastyanenko <kirillseva@gmail.com>
 Authors@R: c(person("Kirill", "Sevastyanenko",

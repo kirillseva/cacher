@@ -47,4 +47,16 @@ describe('Using LRU cache', {
     expect_warning(cache$set('big', c(1:1e6)))
     expect_false(cache$exists('big'))
   })
+
+  test_that('Test with large objects', {
+
+    cache <- LRUcache('3GB')
+    testthat::with_mock(
+      `pryr::object_size` = function(...) "2147483648", # .Machine$integer.max + 1
+      cache$set('foo', "some really big object"),
+      expect_true(pryr::object_size("some really big object") == "2147483648"),
+      expect_true(cache$exists('foo'))
+      )
+  })
+
 })
