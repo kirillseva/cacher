@@ -38,7 +38,7 @@ LRUcache_class <- R6::R6Class("LRUcache",
     use_bytes = FALSE,
     save    = function(name, value) {
       # Check if this value alone exceeds the cache size
-      size <- if(private$use_bytes) as.integer(as.character(pryr::object_size(value))) else 1
+      size <- if(private$use_bytes) as.numeric(as.character(pryr::object_size(value))) else 1
       if (size > private$max_num){
         warning(sprintf("In package cacher: '%s' is too large (%dB) to fit in the LRU cache (%dB) and will not be cached. Consider creating a larger cache.", name, size, private$max_num), call. = FALSE)
         return(NULL)
@@ -76,7 +76,7 @@ LRUcache_class <- R6::R6Class("LRUcache",
       if(length(private$data) == 0){
         0
       } else if(private$use_bytes){
-        Reduce(sum, lapply(private$data, function(x) {as.integer(as.character(pryr::object_size(x)))}))
+        Reduce(sum, lapply(private$data, function(x) {as.numeric(as.character(pryr::object_size(x)))}))
       } else {
         length(private$data)
       }
