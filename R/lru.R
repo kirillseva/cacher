@@ -117,5 +117,7 @@ LRUcache <- function(params) {
   UseMethod('LRUcache', params)
 }
 
+#' @export
 LRUcache.numeric <- function(params) LRUcache_.numeric$new(params)
+#' @export
 LRUcache.character <- function(params) LRUcache_.character$new(params)
