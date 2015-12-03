@@ -22,7 +22,7 @@ LRUcache_ <- R6::R6Class("LRUcache_",
       private$peek(name)
     },
     print = function() {
-      cat(sprintf("<LRUcache> of capacity %d%s", private$max_num, private$units),
+      cat(sprintf("<LRUcache> of capacity %0.f%s", private$max_num, private$units),
           toString(private$format_cache())
           , sep="\n")
       invisible(self)
@@ -36,7 +36,7 @@ LRUcache_ <- R6::R6Class("LRUcache_",
       # Check if this value alone exceeds the cache size
       size <- private$get_new_item_size(value)
       if (size > private$max_num) {
-        warning(sprintf("In package cacher: '%s' is too large (%d%s) to fit in the cache (%d%s) and will
+        warning(sprintf("In package cacher: '%s' is too large (%0.f%s) to fit in the cache (%0.f%s) and will
           not be cached. Consider creating a larger cache.",
           name, size, private$units, private$max_num, private$units), call. = FALSE)
         return(NULL)
