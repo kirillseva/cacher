@@ -1,3 +1,8 @@
+# Version 0.0.7
+- Lazy initialize the data store.
+- Refactor to use R6 inheritance.
+- Better printing and error messages.
+
 # Version 0.0.2
 - Limit your LRU cache size by memory.
 
