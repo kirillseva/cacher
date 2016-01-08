@@ -1,6 +1,7 @@
 LRUcache_ <- R6::R6Class("LRUcache_",
   public = list(
     initialize = function(size) {
+      private$data <- new.env()
     },
     exists = function(name) {
       stopifnot(is.character(name) && length(name) == 1)
@@ -30,7 +31,7 @@ LRUcache_ <- R6::R6Class("LRUcache_",
   ),
   private = list(
     max_num = 0,
-    data    = new.env(),
+    data    = NULL,
     units   = '',
     save    = function(name, value) {
       # Check if this value alone exceeds the cache size
