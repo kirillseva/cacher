@@ -59,4 +59,12 @@ describe('Using LRU cache', {
       )
   })
 
+  test_that('Different caches use different data stores', {
+    cache1 <- LRUcache(10)
+    cache2 <- LRUcache(10)
+    cache1$set('foo', 'bar')
+    expect_equal(cache1$get('foo'), 'bar')
+    expect_false(cache2$exists('foo'))
+  })
+
 })

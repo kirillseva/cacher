@@ -1,6 +1,7 @@
 LRUcache_ <- R6::R6Class("LRUcache_",
   public = list(
     initialize = function(size) {
+      private$data <- new.env()
     },
     exists = function(name) {
       stopifnot(is.character(name) && length(name) == 1)
@@ -30,7 +31,7 @@ LRUcache_ <- R6::R6Class("LRUcache_",
   ),
   private = list(
     max_num = 0,
-    data    = new.env(),
+    data    = NULL,
     units   = '',
     save    = function(name, value) {
       # Check if this value alone exceeds the cache size
@@ -72,6 +73,7 @@ LRUcache_ <- R6::R6Class("LRUcache_",
 LRUcache_.numeric <- R6::R6Class("LRUcache_.numeric", inherit = LRUcache_,
   public = list(
     initialize = function(size) {
+      super$initialize(size)
       stopifnot(all.equal(size, as.integer(size)) && length(size) == 1 && size > 0)
       private$max_num = size
     }
@@ -85,7 +87,8 @@ LRUcache_.numeric <- R6::R6Class("LRUcache_.numeric", inherit = LRUcache_,
 LRUcache_.character <- R6::R6Class("LRUcache_.character", inherit = LRUcache_,
   public = list(
     initialize = function(size) {
-      # Parse size.  Check that string actually describes a size.
+      # Parse size. Check that string actually describes a size.
+      super$initialize(size)
       stopifnot(length(regmatches(size, regexpr('[0-9.]+[kmg]?b?', size, ignore.case=TRUE))) > 0)
       private$max_num = private$convert_size_to_bytes(size)
     }
