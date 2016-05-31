@@ -49,7 +49,6 @@ describe('Using LRU cache', {
   })
 
   test_that('Test with large objects', {
-
     cache <- LRUcache('3GB')
     testthat::with_mock(
       `pryr::object_size` = function(...) "2147483648", # .Machine$integer.max + 1
@@ -65,6 +64,15 @@ describe('Using LRU cache', {
     cache1$set('foo', 'bar')
     expect_equal(cache1$get('foo'), 'bar')
     expect_false(cache2$exists('foo'))
+  })
+
+  test_that("It can forget a particular value", {
+    cache <- LRUcache(10)
+    cache$set("foo", "bar")
+    expect_true(cache$exists("foo"))
+
+    cache$forget("foo")
+    expect_false(cache$exists("foo"))
   })
 
 })

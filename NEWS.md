@@ -1,3 +1,6 @@
+# Version 0.0.8
+- Added `forget` to drop the cache for a particular key.
+
 # Version 0.0.7
 - Lazy initialize the data store.
 - Refactor to use R6 inheritance.

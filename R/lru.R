@@ -17,6 +17,14 @@ LRUcache_ <- R6::R6Class("LRUcache_",
       stopifnot(name %in% ls(private$data))
       private$fetch(name)
     },
+    forget = function(name) {
+      stopifnot(is.character(name) && length(name) == 1)
+      if (!(name %in% ls(private$data))) {
+        warning(name, " was already not in the cache.")
+      } else {
+        rm(list = name, envir = private$data)
+      }
+    },
     last_accessed = function(name) {
       stopifnot(is.character(name) && length(name) == 1)
       stopifnot(name %in% ls(private$data))
