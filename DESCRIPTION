@@ -13,7 +13,8 @@ License: MIT
 LazyData: true
 Imports:
     R6,
-    pryr
+    pryr,
+    plyr
 Suggests:
     knitr,
     microbenchmark,
@@ -21,3 +22,4 @@ Suggests:
 Roxygen: list(wrap = FALSE)
 URL: http://github.com/kirillseva/cacher
 BugReports: http://github.com/kirillseva/cacher/issues
+RoxygenNote: 5.0.1.9000

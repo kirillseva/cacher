@@ -51,7 +51,7 @@ LRUcache_ <- R6::R6Class("LRUcache_",
         return(NULL)
       }
       # Check for eviction
-      while (private$check_for_eviction(name, size)) private$evict()
+      while (private$check_for_eviction(name, size)) { private$evict() }
       private$data[[name]] <- list(value = value, timestamp = Sys.time())
     },
     fetch   = function(name) {
@@ -87,8 +87,8 @@ LRUcache_.numeric <- R6::R6Class("LRUcache_.numeric", inherit = LRUcache_,
     }
   ),
   private = list(
-    get_new_item_size = function(item) 1,
-    get_current_size = function() length(private$data)
+    get_new_item_size = function(item) { 1 },
+    get_current_size  = function() { length(private$data) }
   )
 )
 
@@ -97,38 +97,55 @@ LRUcache_.character <- R6::R6Class("LRUcache_.character", inherit = LRUcache_,
     initialize = function(size) {
       # Parse size. Check that string actually describes a size.
       super$initialize(size)
-      stopifnot(length(regmatches(size, regexpr('[0-9.]+[kmg]?b?', size, ignore.case=TRUE))) > 0)
+      stopifnot(length(regmatches(size, regexpr('[0-9.]+[kmg]?b?', size, ignore.case = TRUE))) > 0)
       private$max_num = private$convert_size_to_bytes(size)
     }
   ),
   private = list(
     units = 'B',
-    get_new_item_size = function(item){
+    get_new_item_size = function(item) {
       as.numeric(as.character(pryr::object_size(item)))
     },
-    convert_size_to_bytes = function(size){ # size is a string, e.g. "100mb"
+    convert_size_to_bytes = function(size) { # size is a string, e.g. "100mb"
       qty <- as.double(regmatches(size, regexpr("[0-9.]+", size))) # e.g. 100, 12.5
-      units <- substring(toupper(regmatches(size, regexpr("[a-z]+", size, ignore.case=TRUE))), 1, 1) # e.g. "B","K","M", "G"...
+      units <- substring(toupper(regmatches(size, regexpr("[a-z]+", size, ignore.case = TRUE))), 1, 1) # e.g. "B","K","M", "G"...
       # Convert size to bytes
       pow <- switch(units,
-        "B"=0,
-        "K"=1,
-        "M"=2,
-        "G"=3)
-      qty * (1000^pow) # pryr::object_size assumes 1KB = 1000B rather than 1024B
+        "B" = 0,
+        "K" = 1,
+        "M" = 2,
+        "G" = 3)
+      qty * (1000 ^ pow) # pryr::object_size assumes 1KB = 1000B rather than 1024B
     },
-    get_current_size = function(){ # in bytes
-      if(length(private$data) == 0) 0 else
-        Reduce(sum, lapply(private$data, function(x) { as.numeric(as.character(pryr::object_size(x))) }))
+    get_current_size = function() { # in bytes
+      if (length(private$data) == 0) { 0 }
+      else {
+        Reduce(sum, lapply(private$data,
+          function(x) { as.numeric(as.character(pryr::object_size(x))) }))
+      }
     }
   )
 )
+
+#' Create an LRU in-memory cache
+#'
+#' LRU stands for Least Recently Used and is a description of a cache eviction
+#' strategy. In simpler words, this means that you can set a size limit
+#' and the cache will smartly forget about the item that was accessed last
+#' in case you need to add another item which would cause the cache to breach the
+#' memory or size constraint.
+#'
+#' You can use cacher either by calling \code{LRUcache(3)} to store maximum 3 objects
+#' or calling \code{LRUcache("150mb")} to limit the cache size to not exceed 150mb of RAM.
+#'
+#' @param params numeric or character. If numeric it will create a cache that's
+#'   limited by the total number of objects it can hold. If it's a character it
+#'   will check how much RAM it consumes using \code{pryr::object_size}
 #' @export
-LRUcache <- function(params) {
-  UseMethod('LRUcache', params)
-}
+LRUcache <- function(params) { UseMethod('LRUcache', params) }
 
 #' @export
-LRUcache.numeric <- function(params) LRUcache_.numeric$new(params)
+LRUcache.numeric <- function(params) { LRUcache_.numeric$new(params) }
+
 #' @export
-LRUcache.character <- function(params) LRUcache_.character$new(params)
+LRUcache.character <- function(params) { LRUcache_.character$new(params) }
