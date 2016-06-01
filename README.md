@@ -2,13 +2,15 @@
 
 In memory caches for R. Currently implements LRU cache with size parameter.
 
-Create a cache:
+Create a cache...
 
 ```R
 cache <- LRUcache("150mb")  # cache with 150mb of size
 cache2 <- LRUcache("1GB")   # cache with 1GB of size
 cache3 <- LRUcache(3)       # cache that can hold three items of any size (that fits in RAM)
 ```
+
+Then use it...
 
 ```R
 cache3$set("key", "this is your value")  # set a value at a particular key...
