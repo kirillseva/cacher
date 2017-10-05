@@ -45,6 +45,15 @@ describe('Using LRU cache', {
     expect_true(cache$last_accessed('hello') < Sys.time())
   })
 
+  test_that('Test last_accessed after peek', {
+    cache <- LRUcache(1)
+    cache$set('hello', 'world')
+    time <- Sys.time()
+    cache$peek('hello')
+    expect_is(cache$last_accessed('hello'), 'POSIXct')
+    expect_true(cache$last_accessed('hello') < time)
+  })
+
   test_that('Test with byte size', {
     cache <- LRUcache('150B')
     cache$set('foo', 54.124)
