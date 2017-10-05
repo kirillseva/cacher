@@ -34,6 +34,8 @@ cache3$exists("key4")
 [1] FALSE
 ```
 
+## Installation
+
 Install with [devtools](https://github.com/hadley/devtools).
 
 ```R
