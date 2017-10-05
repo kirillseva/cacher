@@ -33,3 +33,14 @@ cache3$forget("key4")                    # you can also explicitly forget a cert
 cache3$exists("key4")
 [1] FALSE
 ```
+
+## Installation
+
+Install with [devtools](https://github.com/hadley/devtools).
+
+```R
+install.packages("devtools")
+library(devtools)
+install_github("kirillseva/cacher")
+```
+
