@@ -17,6 +17,11 @@ LRUcache_ <- R6::R6Class("LRUcache_",
       stopifnot(name %in% ls(private$data))
       private$fetch(name)
     },
+    peek = function(name) {
+      stopifnot(is.character(name) && length(name) == 1)
+      stopifnot(name %in% ls(private$data))
+      private$data[[name]]$value
+    },
     forget = function(name) {
       stopifnot(is.character(name) && length(name) == 1)
       if (!(name %in% ls(private$data))) {
