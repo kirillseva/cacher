@@ -17,6 +17,9 @@ cache3$set("key", "this is your value")  # set a value at a particular key...
 cache3$get("key")                        # ...and get that value back!
 [1] "this is your value"
 
+cache3$peek("key")                       # doesn't alter the key's timestamp
+[1] "this is your value"
+
 cache3$exists("key")                     # ...see if your key exists
 [1] TRUE
 

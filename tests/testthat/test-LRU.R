@@ -26,12 +26,32 @@ describe('Using LRU cache', {
     expect_true(cache$exists('hello'))
   })
 
-  test_that('Test peek', {
-    cache <- LRUcache(2)
-    cache$set('hello', 'world')$set('cache', 'money')
-    expect_is(cache$last_accessed('cache'), 'POSIXct')
-    # did not update the timestamp metadata
-    expect_true(cache$last_accessed('hello') < cache$last_accessed('cache'))
+  test_that('Test last_accessed after set', {
+    cache <- LRUcache(1)
+    time <- Sys.time()
+    cache$set('hello', 'world')
+    expect_is(cache$last_accessed('hello'), 'POSIXct')
+    expect_true(cache$last_accessed('hello') > time)
+    expect_true(cache$last_accessed('hello') < Sys.time())
+  })
+
+  test_that('Test last_accessed after get', {
+    cache <- LRUcache(1)
+    cache$set('hello', 'world')
+    time <- Sys.time()
+    cache$get('hello')
+    expect_is(cache$last_accessed('hello'), 'POSIXct')
+    expect_true(cache$last_accessed('hello') > time)
+    expect_true(cache$last_accessed('hello') < Sys.time())
+  })
+
+  test_that('Test last_accessed after peek', {
+    cache <- LRUcache(1)
+    cache$set('hello', 'world')
+    time <- Sys.time()
+    cache$peek('hello')
+    expect_is(cache$last_accessed('hello'), 'POSIXct')
+    expect_true(cache$last_accessed('hello') < time)
   })
 
   test_that('Test with byte size', {

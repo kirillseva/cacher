@@ -1,3 +1,6 @@
+# Version 0.1.1
+- Added `peek` to perform `get` without updating the timestamp.
+
 # Version 0.0.8
 - Added `forget` to drop the cache for a particular key.
 
