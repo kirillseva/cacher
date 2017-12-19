@@ -35,6 +35,9 @@ LRUcache_ <- R6::R6Class("LRUcache_",
       stopifnot(name %in% ls(private$data))
       private$data[[name]]$timestamp
     },
+    list_all = function() {
+      ls(private$data)
+    },
     print = function() {
       cat(sprintf("<LRUcache> of capacity %0.f%s", private$max_num, private$units),
           toString(private$format_cache())

@@ -95,4 +95,12 @@ describe('Using LRU cache', {
     expect_false(cache$exists("foo"))
   })
 
+  test_that("It can produce a list of all cached values", {
+    cache <- LRUcache(10)
+    cache$set("foo", 1)
+    cache$set("bar", 2)
+    expect_true(setequal(cache$list_all(), c("foo", "bar")))
+    cache$set("baz", 3)
+  })
+
 })
