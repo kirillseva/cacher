@@ -1,3 +1,6 @@
+# Version 0.1.2
+- Added a method to give a list of keys for all objects in a cache.
+
 # Version 0.1.1
 - Added `peek` to perform `get` without updating the timestamp.
 
