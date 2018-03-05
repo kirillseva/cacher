@@ -1,4 +1,5 @@
+#' @export
 `[[.LRUcache_` <- function(cache, key) { cache$get(key) }
-`[[<-.LRUcache_` <- function(cache, key, value) {
-  cache$set(key, value = value)
-}
+
+#' @export
+`[[<-.LRUcache_` <- function(cache, key, value) { cache$set(key, value = value) }
