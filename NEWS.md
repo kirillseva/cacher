@@ -1,3 +1,6 @@
+# Version 0.1.3
+- Allows reading and writing to a cache via `[[`.
+
 # Version 0.1.2
 - Added a method to give a list of keys for all objects in a cache.
 
